@@ -62,7 +62,7 @@
 #include <lib/drivers/device/spi.h>
 #include <lib/ecl/geo/geo.h>
 #include <lib/perf/perf_counter.h>
-#include <px4_getopt.h>
+#include <px4_platform_common/getopt.h>
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 #include <systemlib/conversions.h>
 #include <systemlib/px4_macros.h>
@@ -317,12 +317,14 @@ public:
 
 	void			print_registers();
 
+#ifndef CONSTRAINED_FLASH
 	/**
 	 * Test behaviour against factory offsets
 	 *
 	 * @return 0 on success, 1 on failure
 	 */
 	int 			factory_self_test();
+#endif
 
 	// deliberately cause a sensor error
 	void 			test_error();

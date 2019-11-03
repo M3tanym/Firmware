@@ -41,8 +41,8 @@
  *
  */
 
-#include <px4_config.h>
-#include <px4_tasks.h>
+#include <px4_platform_common/px4_config.h>
+#include <px4_platform_common/tasks.h>
 #include <drivers/device/i2c.h>
 #include <parameters/param.h>
 
@@ -1052,7 +1052,7 @@ MK::pwm_ioctl(file *filp, int cmd, unsigned long arg)
 
 	case MIXERIOCLOADBUF: {
 			const char *buf = (const char *)arg;
-			unsigned buflen = strnlen(buf, 1024);
+			unsigned buflen = strlen(buf);
 
 			if (_mixers == nullptr) {
 				_mixers = new MixerGroup(control_callback, (uintptr_t)&_controls);
