@@ -32,11 +32,17 @@
  ****************************************************************************/
 
 /**
- * @file LORDGX5.cpp
+ * @file lordgx5_main.cpp
  */
 
 #include "LORDGX5.h"
 
-LORDGX5::LORDGX5(){}
-
-LORDGX5::~LORDGX5(){}
+/**
+ * Driver 'main' command.
+ */
+extern "C" int lordgx5_main(int argc, char *argv[])
+{
+    PX4_INFO("LORD starting");
+    
+    return PX4_OK;
+}

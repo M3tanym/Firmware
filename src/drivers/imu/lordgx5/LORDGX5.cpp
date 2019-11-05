@@ -32,15 +32,16 @@
  ****************************************************************************/
 
 /**
- * @file lordGX5_main.cpp
+ * @file LORDGX5.cpp
  */
 
 #include "LORDGX5.h"
 
-/**
- * Driver 'main' command.
- */
-extern "C" int lordGX5_main(int argc, char *argv[])
+LORDGX5::LORDGX5(int bus, uint32_t device) :
+    SPI("ADIS16448", nullptr, bus, device, SPIDEV_MODE3, 1000000),
+	ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_device_id()))
 {
     
 }
+
+LORDGX5::~LORDGX5(){}
