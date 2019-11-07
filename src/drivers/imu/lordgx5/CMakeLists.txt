@@ -39,9 +39,11 @@ px4_add_module(
 		LORDGX5.cpp
 		lordgx5_main.cpp
 	DEPENDS
-		px4_work_queue
-		drivers_accelerometer
-		drivers_barometer
-		drivers_gyroscope
-		drivers_magnetometer
+	  px4_work_queue
+	  drivers_accelerometer
+	  drivers_barometer
+	  drivers_gyroscope
+	  drivers_magnetometer
+	MODULE_CONFIG
+    module.yaml
 	)
