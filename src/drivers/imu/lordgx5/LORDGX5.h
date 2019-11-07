@@ -45,11 +45,11 @@
 #include <perf/perf_counter.h>
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 
-class ADIS16448 : public device::SPI, public px4::ScheduledWorkItem
+class LORDGX5 : public device::SPI, public px4::ScheduledWorkItem
 {
 public:
-	ADIS16448();
-	virtual ~ADIS16448();
+	LORDGX5(int bus, uint32_t device);
+	virtual ~LORDGX5();
 
 protected:
 
