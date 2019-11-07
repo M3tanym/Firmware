@@ -43,7 +43,7 @@
 extern "C" int lordgx5_main(int argc, char *argv[])
 {
     PX4_INFO("LORD starting");
-    PX4_INFO(argv[1]);
+    PX4_INFO("%s", argv[1]);
 
     return PX4_OK;
 }
