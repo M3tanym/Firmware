@@ -46,6 +46,7 @@
 #include <px4_platform_common/cli.h>
 #include <px4_platform_common/getopt.h>
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
+#include <termios.h>
 
 class LORDCX5
 {
@@ -54,6 +55,7 @@ public:
 	virtual ~LORDCX5();
     bool testWrite(uint8_t *data, size_t len);
     void testRead();
+    int configSerial();
 
 protected:
 

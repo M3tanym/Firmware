@@ -80,6 +80,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 		return 1;
 	}
 	LORDCX5 l(0, 0);
+    l.configSerial();
 	l.testRead();
 /*
 	GPS *gps;

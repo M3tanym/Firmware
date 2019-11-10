@@ -43,16 +43,16 @@ LORDCX5::LORDCX5(int bus, uint32_t device) {
 
 LORDCX5::~LORDCX5() {}
 
-int configSerial() {
+int LORDCX5::configSerial() {
     PX4_INFO("Configuring serial...");
     struct termios uart_config;
     int termios_state;
     int speed = B115200;
-    char *port = "/dev/ttyS4";
+    const char *p = "/dev/ttyS4";
 
-    serial_fd = open(port, O_RDWR | O_NOCTTY);
+    serial_fd = open(p, O_RDWR | O_NOCTTY);
     if (serial_fd < 0) {
-        PX4_ERR("ERR: failed to open serial port: %s", port);
+        PX4_ERR("ERR: failed to open serial port: %s", p);
     }
 
     PX4_INFO("Setting speed...");
@@ -72,7 +72,7 @@ int configSerial() {
         return -1;
     }
 
-    if ((termios_state = tcsetattr(_serial_fd, TCSANOW, &uart_config)) < 0) {
+    if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
         PX4_INFO("ERR: %d (tcsetattr)", termios_state);
         return -1;
     }
@@ -81,7 +81,6 @@ int configSerial() {
 }
 
 void LORDCX5::testRead() {
-    configSerial();
     int err = 0;
     int bytes_available = 0;
     uint8_t buf[64];
