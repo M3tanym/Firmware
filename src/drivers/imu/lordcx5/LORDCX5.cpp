@@ -93,8 +93,9 @@ void LORDCX5::testRead() {
     }
 }
 
-bool LORDCX5::testWrite(uint8_t *data, size_t len) {
-    size_t written = write(serial_fd, data, len);
+bool LORDCX5::testWrite(uint8_t *data) {
+    PX4_INFO("Writing...");
+    size_t written = write(serial_fd, data, sizeof(data));
     fsync(serial_fd);
     return written == len;
 }
