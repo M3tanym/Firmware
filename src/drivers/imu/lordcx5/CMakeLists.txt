@@ -31,13 +31,13 @@
 #
 ############################################################################
 px4_add_module(
-	MODULE drivers__imu__lordgx5
-	MAIN lordgx5
+	MODULE drivers__imu__lordcx5
+	MAIN lordcx5
 	COMPILE_FLAGS
 		-Wno-cast-align # TODO: fix and enable
 	SRCS
-		LORDGX5.cpp
-		lordgx5_main.cpp
+		LORDCX5.cpp
+		lordcx5_main.cpp
 	DEPENDS
 	  px4_work_queue
 	  drivers_accelerometer

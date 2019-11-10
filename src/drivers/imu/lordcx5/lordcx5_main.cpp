@@ -32,26 +32,76 @@
  ****************************************************************************/
 
 /**
- * @file LORDGX5.h
+ * @file lordcx5_main.cpp
  */
 
-#include <drivers/device/spi.h>
-#include <ecl/geo/geo.h>
-#include <lib/conversion/rotation.h>
-#include <lib/drivers/accelerometer/PX4Accelerometer.hpp>
-#include <lib/drivers/barometer/PX4Barometer.hpp>
-#include <lib/drivers/gyroscope/PX4Gyroscope.hpp>
-#include <lib/drivers/magnetometer/PX4Magnetometer.hpp>
-#include <perf/perf_counter.h>
-#include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
+#include "LORDCX5.h"
 
-class LORDGX5 : public device::SPI, public px4::ScheduledWorkItem
+/**
+ * Driver 'main' command.
+ */
+extern "C" int lordcx5_main(int argc, char *argv[])
 {
-public:
-	LORDGX5(int bus, uint32_t device);
-	virtual ~LORDGX5();
+    PX4_INFO("LORD starting");
+    
+    const char *device_name = "/dev/ttyS3";
+	int baudrate_main = 0;
 
-protected:
+	bool error_flag = false;
+	int myoptind = 1;
+	int ch;
+	const char *myoptarg = nullptr;
 
-private:
-};
+	while ((ch = px4_getopt(argc, argv, "b:d:", &myoptind, &myoptarg)) != EOF) {
+		switch (ch) {
+		case 'b':
+			if (px4_get_parameter_value(myoptarg, baudrate_main) != 0) {
+				PX4_ERR("baudrate parsing failed");
+				error_flag = true;
+			}
+			break;
+
+		case 'd':
+			device_name = myoptarg;
+			break;
+
+		case '?':
+			error_flag = true;
+			break;
+
+		default:
+			PX4_WARN("unrecognized flag");
+			error_flag = true;
+			break;
+		}
+	}
+
+	if (error_flag) {
+		return nullptr;
+	}
+/*
+	GPS *gps;
+	if (instance == Instance::Main) {
+		gps = new GPS(device_name, mode, interface, fake_gps, enable_sat_info, instance, baudrate_main);
+
+		if (gps && device_name_secondary) {
+			task_spawn(argc, argv, Instance::Secondary);
+			// wait until running
+			int i = 0;
+
+			do {
+				// wait up to 1s
+				px4_usleep(2500);
+
+			} while (!_secondary_instance && ++i < 400);
+
+			if (i == 400) {
+				PX4_ERR("Timed out while waiting for thread to start");
+			}
+		}
+	} else { // secondary instance
+		gps = new GPS(device_name_secondary, mode, interface, fake_gps, enable_sat_info, instance, baudrate_secondary);
+	}
+*/
+    return PX4_OK;
+}
