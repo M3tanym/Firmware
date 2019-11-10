@@ -32,18 +32,30 @@
  ****************************************************************************/
 
 /**
- * @file lordgx5_main.cpp
+ * @file LORDCX5.h
  */
 
-#include "LORDGX5.h"
+#include <drivers/device/spi.h>
+#include <ecl/geo/geo.h>
+#include <lib/conversion/rotation.h>
+#include <lib/drivers/accelerometer/PX4Accelerometer.hpp>
+#include <lib/drivers/barometer/PX4Barometer.hpp>
+#include <lib/drivers/gyroscope/PX4Gyroscope.hpp>
+#include <lib/drivers/magnetometer/PX4Magnetometer.hpp>
+#include <perf/perf_counter.h>
+#include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 
-/**
- * Driver 'main' command.
- */
-extern "C" int lordgx5_main(int argc, char *argv[])
+class LORDCX5 : public device::SPI, public px4::ScheduledWorkItem
 {
-    PX4_INFO("LORD starting");
-    PX4_INFO("%s", argv[1]);
+public:
+	LORDCX5(int bus, uint32_t device);
+	virtual ~LORDCX5();
+    testWrite(uint8_t *data, size_t len);
 
-    return PX4_OK;
-}
+protected:
+
+private:
+    int             serial_fd{-1};
+    unsigned        baud_rate{0};
+    char            port[20] {};
+};
