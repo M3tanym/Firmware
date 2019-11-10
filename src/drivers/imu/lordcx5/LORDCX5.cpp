@@ -43,24 +43,6 @@ LORDCX5::LORDCX5(int bus, uint32_t device) {
 
 LORDCX5::~LORDCX5() {}
 
-void LORDCX5::testRead() {
-    configSerial();
-    int err = 0;
-    int bytes_available = 0;
-    uint8_t buf[64];
-    PX4_INFO("Reading...");
-    err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
-    PX4_INFO("Bytes available: %d, error: %d", bytes_available, err);
-    int ret = read(serial_fd, buf, sizeof(buf));
-    PX4_INFO("Read %d bytes: |%s|", ret, buf);
-}
-
-bool LORDCX5::testWrite(uint8_t *data, size_t len) {
-    size_t written = write(serial_fd, data, len);
-    fsync(serial_fd);
-    return written == len;
-}
-
 int configSerial() {
     PX4_INFO("Configuring serial...");
     struct termios uart_config;
@@ -96,4 +78,22 @@ int configSerial() {
     }
 
     return 0;
+}
+
+void LORDCX5::testRead() {
+    configSerial();
+    int err = 0;
+    int bytes_available = 0;
+    uint8_t buf[64];
+    PX4_INFO("Reading...");
+    err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
+    PX4_INFO("Bytes available: %d, error: %d", bytes_available, err);
+    int ret = read(serial_fd, buf, sizeof(buf));
+    PX4_INFO("Read %d bytes: |%s|", ret, buf);
+}
+
+bool LORDCX5::testWrite(uint8_t *data, size_t len) {
+    size_t written = write(serial_fd, data, len);
+    fsync(serial_fd);
+    return written == len;
 }
