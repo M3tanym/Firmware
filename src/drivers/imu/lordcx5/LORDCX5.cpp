@@ -37,25 +37,63 @@
 
 #include "LORDCX5.h"
 
-LORDCX5::LORDCX5(int bus, uint32_t device)
-{
-    
+LORDCX5::LORDCX5(int bus, uint32_t device) {
+
 }
 
-LORDCX5::~LORDCX5(){}
+LORDCX5::~LORDCX5() {}
 
 void LORDCX5::testRead() {
+    configSerial();
     int err = 0;
     int bytes_available = 0;
     uint8_t buf[64];
-    err = ioctl(serial_fd, FIONREAD, (unsigned long)&bytes_available);
+    PX4_INFO("Reading...");
+    err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
+    PX4_INFO("Bytes available: %d, error: %d", bytes_available, err);
     int ret = read(serial_fd, buf, sizeof(buf));
-    PX4_INFO("Read: %s", buf);
-    PX4_INFO("%d %d", err, ret);
+    PX4_INFO("Read %d bytes: |%s|", ret, buf);
 }
 
 bool LORDCX5::testWrite(uint8_t *data, size_t len) {
     size_t written = write(serial_fd, data, len);
     fsync(serial_fd);
     return written == len;
+}
+
+int configSerial() {
+    PX4_INFO("Configuring serial...");
+    struct termios uart_config;
+    int termios_state;
+    int speed = B115200;
+    char *port = "/dev/ttyS4";
+
+    serial_fd = open(port, O_RDWR | O_NOCTTY);
+    if (serial_fd < 0) {
+        PX4_ERR("ERR: failed to open serial port: %s", port);
+    }
+
+    PX4_INFO("Setting speed...");
+    tcgetattr(serial_fd, &uart_config);
+    uart_config.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
+    uart_config.c_oflag = 0;
+    uart_config.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+    uart_config.c_cflag &= ~(CSTOPB | PARENB | CRTSCTS);
+
+    if ((termios_state = cfsetispeed(&uart_config, speed)) < 0) {
+        PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
+        return -1;
+    }
+
+    if ((termios_state = cfsetospeed(&uart_config, speed)) < 0) {
+        PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
+        return -1;
+    }
+
+    if ((termios_state = tcsetattr(_serial_fd, TCSANOW, &uart_config)) < 0) {
+        PX4_INFO("ERR: %d (tcsetattr)", termios_state);
+        return -1;
+    }
+
+    return 0;
 }
