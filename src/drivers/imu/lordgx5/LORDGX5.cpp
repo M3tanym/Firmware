@@ -45,3 +45,18 @@ LORDGX5::LORDGX5(int bus, uint32_t device) :
 }
 
 LORDGX5::~LORDGX5(){}
+
+LORDGX5::testRead() {
+    int err = 0;
+    int bytes_available = 0;
+    uint8_t buf[64];
+    err = ioctl(_serial_fd, FIONREAD, (unsigned long)&bytes_available);
+    int ret = read(_serial_fd, buf, buf_length);
+    PX4_INFO("Read: %s", buf);
+}
+
+LORDGX5::testWrite(uint8_t *data, size_t len) {
+    size_t written = write(serial_fd, data, len);
+    fsync(serial_fd);
+    return written == len;
+}

@@ -48,10 +48,14 @@
 class LORDGX5 : public device::SPI, public px4::ScheduledWorkItem
 {
 public:
-	LORDGX5(int bus, uint32_t device);
+    LORDGX5(int bus, uint32_t device);
 	virtual ~LORDGX5();
+    testWrite(uint8_t *data, size_t len);
 
 protected:
 
 private:
+    int             serial_fd{-1};
+    unsigned        baud_rate{0};
+    char            port[20] {};
 };
