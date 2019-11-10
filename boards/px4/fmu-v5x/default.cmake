@@ -33,6 +33,7 @@ px4_add_board(
 		#imu # all available imu drivers
 		imu/bmi088
 # TBD		imu/ism330dlc - needs bus selection
+		imu/lordcx5
 		imu/mpu6000
 		irlock
 		lights/blinkm
