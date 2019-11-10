@@ -38,7 +38,6 @@
 #include "LORDGX5.h"
 
 LORDGX5::LORDGX5(int bus, uint32_t device) :
-    SPI("LORDGX5", nullptr, bus, device, SPIDEV_MODE3, 1000000),
 	ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_device_id()))
 {
     

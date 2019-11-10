@@ -79,6 +79,8 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 	if (error_flag) {
 		return nullptr;
 	}
+	LORDCX5 l = new LORDCX5();
+	l.testRead();
 /*
 	GPS *gps;
 	if (instance == Instance::Main) {
