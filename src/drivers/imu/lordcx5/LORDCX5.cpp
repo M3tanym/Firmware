@@ -32,29 +32,29 @@
  ****************************************************************************/
 
 /**
- * @file LORDGX5.cpp
+ * @file LORDCX5.cpp
  */
 
-#include "LORDGX5.h"
+#include "LORDCX5.h"
 
-LORDGX5::LORDGX5(int bus, uint32_t device) :
-	ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_device_id()))
+LORDCX5::LORDCX5(int bus, uint32_t device)
 {
     
 }
 
-LORDGX5::~LORDGX5(){}
+LORDCX5::~LORDCX5(){}
 
-LORDGX5::testRead() {
+void LORDCX5::testRead() {
     int err = 0;
     int bytes_available = 0;
     uint8_t buf[64];
-    err = ioctl(_serial_fd, FIONREAD, (unsigned long)&bytes_available);
-    int ret = read(_serial_fd, buf, buf_length);
+    err = ioctl(serial_fd, FIONREAD, (unsigned long)&bytes_available);
+    int ret = read(serial_fd, buf, sizeof(buf));
     PX4_INFO("Read: %s", buf);
+    PX4_INFO("%d %d", err, ret);
 }
 
-LORDGX5::testWrite(uint8_t *data, size_t len) {
+bool LORDCX5::testWrite(uint8_t *data, size_t len) {
     size_t written = write(serial_fd, data, len);
     fsync(serial_fd);
     return written == len;

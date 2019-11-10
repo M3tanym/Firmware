@@ -43,14 +43,17 @@
 #include <lib/drivers/gyroscope/PX4Gyroscope.hpp>
 #include <lib/drivers/magnetometer/PX4Magnetometer.hpp>
 #include <perf/perf_counter.h>
+#include <px4_platform_common/cli.h>
+#include <px4_platform_common/getopt.h>
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 
-class LORDCX5 : public device::SPI, public px4::ScheduledWorkItem
+class LORDCX5
 {
 public:
 	LORDCX5(int bus, uint32_t device);
 	virtual ~LORDCX5();
-    testWrite(uint8_t *data, size_t len);
+    bool testWrite(uint8_t *data, size_t len);
+    void testRead();
 
 protected:
 

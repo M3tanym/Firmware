@@ -44,7 +44,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 {
     PX4_INFO("LORD starting");
     
-    const char *device_name = "/dev/ttyS3";
+    // const char *device_name = "/dev/ttyS3";
 	int baudrate_main = 0;
 
 	bool error_flag = false;
@@ -62,7 +62,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 			break;
 
 		case 'd':
-			device_name = myoptarg;
+			// device_name = myoptarg;
 			break;
 
 		case '?':
@@ -77,9 +77,9 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 	}
 
 	if (error_flag) {
-		return nullptr;
+		return 1;
 	}
-	LORDCX5 l = new LORDCX5();
+	LORDCX5 l(0, 0);
 	l.testRead();
 /*
 	GPS *gps;
