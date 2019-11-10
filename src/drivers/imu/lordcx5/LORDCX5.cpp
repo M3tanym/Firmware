@@ -97,5 +97,8 @@ bool LORDCX5::testWrite(uint8_t *data, size_t len) {
     PX4_INFO("Writing...");
     size_t written = write(serial_fd, data, len);
     fsync(serial_fd);
-    return written == len;
+
+    bool success = written == len;
+    PX4_INFO("Wrote %d bytes. Success: %d", written, success);
+    return success;
 }
