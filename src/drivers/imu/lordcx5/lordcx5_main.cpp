@@ -45,7 +45,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
     PX4_INFO("LORD starting");
     
     const char *device_name = "/dev/ttyS4";
-	int baudrate_main = 0;
+	int baudrate_main = 115200;
 
 	bool error_flag = false;
 	int myoptind = 1;
@@ -79,7 +79,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 	if (error_flag) {
 		return 1;
 	}
-	LORDCX5 l(0, 0);
+	LORDCX5 l(device_name, baudrate_main);
     l.configSerial();
     uint8_t ping[8] = {0x75, 0x65, 0x01, 0x02, 0x02, 0x01, 0xE0, 0xC6};
     l.testWrite(ping, 8);

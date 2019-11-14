@@ -61,6 +61,6 @@ class LORDCX5
 
     private:
         int             serial_fd{-1};
-        unsigned        baud_rate{0};
-        char            device[20] {};
+        unsigned        baud_rate;
+        char            *dev {};
 };

@@ -37,13 +37,16 @@
 
 #include "LORDCX5.h"
 
-LORDCX5::LORDCX5(const char * dev, int baud) :
-    baud_rate(baud),
-    device(dev) {
-
+LORDCX5::LORDCX5(const char *device, int baud) :
+    baud_rate(baud) {
+    dev = new char[20];
+    strncpy(dev, device, 19);
+    dev[19] = 0;
 }
 
-LORDCX5::~LORDCX5() {}
+LORDCX5::~LORDCX5() {
+    delete[] dev;
+}
 
 int LORDCX5::configSerial() {
     PX4_INFO("Configuring serial...");
