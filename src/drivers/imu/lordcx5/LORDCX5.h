@@ -50,17 +50,17 @@
 
 class LORDCX5
 {
-public:
-	LORDCX5(int bus, uint32_t device);
-	virtual ~LORDCX5();
-    bool testWrite(uint8_t *data, size_t len);
-    void testRead();
-    int configSerial();
+    public:
+        LORDCX5(const char * device, int baud);
+        virtual ~LORDCX5();
+        bool testWrite(uint8_t *data, size_t len);
+        void testRead();
+        int configSerial();
 
-protected:
+    protected:
 
-private:
-    int             serial_fd{-1};
-    unsigned        baud_rate{0};
-    char            port[20] {};
+    private:
+        int             serial_fd{-1};
+        unsigned        baud_rate{0};
+        char            device[20] {};
 };

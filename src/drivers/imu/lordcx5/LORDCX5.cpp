@@ -37,7 +37,9 @@
 
 #include "LORDCX5.h"
 
-LORDCX5::LORDCX5(int bus, uint32_t device) {
+LORDCX5::LORDCX5(const char * dev, int baud) :
+    baud_rate(baud),
+    device(dev) {
 
 }
 
@@ -48,11 +50,10 @@ int LORDCX5::configSerial() {
     struct termios uart_config;
     int termios_state;
     int speed = B115200;
-    const char *p = "/dev/ttyS4";
 
-    serial_fd = open(p, O_RDWR | O_NOCTTY);
+    serial_fd = open(dev, O_RDWR | O_NOCTTY);
     if (serial_fd < 0) {
-        PX4_ERR("ERR: failed to open serial port: %s", p);
+        PX4_ERR("ERR: failed to open serial port: %s", dev);
     }
 
     PX4_INFO("Setting speed...");

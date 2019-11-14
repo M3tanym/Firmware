@@ -44,25 +44,25 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 {
     PX4_INFO("LORD starting");
     
-    // const char *device_name = "/dev/ttyS3";
+    const char *device_name = "/dev/ttyS4";
 	int baudrate_main = 0;
 
 	bool error_flag = false;
 	int myoptind = 1;
 	int ch;
-	const char *myoptarg = nullptr;
+	const char *arg = nullptr;
 
-	while ((ch = px4_getopt(argc, argv, "b:d:", &myoptind, &myoptarg)) != EOF) {
+	while ((ch = px4_getopt(argc, argv, "b:d:", &myoptind, &arg)) != EOF) {
 		switch (ch) {
 		case 'b':
-			if (px4_get_parameter_value(myoptarg, baudrate_main) != 0) {
+			if (px4_get_parameter_value(arg, baudrate_main) != 0) {
 				PX4_ERR("baudrate parsing failed");
 				error_flag = true;
 			}
 			break;
 
 		case 'd':
-			// device_name = myoptarg;
+			device_name = arg;
 			break;
 
 		case '?':
