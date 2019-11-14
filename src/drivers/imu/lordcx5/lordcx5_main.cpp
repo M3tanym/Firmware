@@ -44,7 +44,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 {
     PX4_INFO("LORD starting");
     
-    const char *device_name = "/dev/ttyS4";
+    const char *device_name = "/dev/ttyS3";
 	int baudrate_main = 115200;
 
 	bool error_flag = false;
