@@ -49,38 +49,53 @@ LORDCX5::~LORDCX5() {
 }
 
 int LORDCX5::configSerial() {
-    PX4_INFO("Configuring serial...");
+    PX4_INFO("Opening serial port...");
     struct termios uart_config;
     int termios_state;
-    int speed = B115200;
 
     serial_fd = open(dev, O_RDWR | O_NOCTTY);
     if (serial_fd < 0) {
         PX4_ERR("ERR: failed to open serial port: %s", dev);
+        return -1;
     }
 
-    PX4_INFO("Setting speed...");
+    PX4_INFO("Configuring serial port settings...");
     tcgetattr(serial_fd, &uart_config);
-    uart_config.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
-    uart_config.c_oflag = 0;
-    uart_config.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
-    uart_config.c_cflag &= ~(CSTOPB | PARENB | CRTSCTS);
 
-    if ((termios_state = cfsetispeed(&uart_config, speed)) < 0) {
+    // properly configure the terminal (see also https://en.wikibooks.org/wiki/Serial_Programming/termios)
+    // Input flags - Turn off input processing
+    // convert break to null byte, no CR to NL translation,
+    // no NL to CR translation, don't mark parity errors or breaks
+    // no input parity check, don't strip high bit off,
+    // no XON/XOFF software flow control
+    uart_config.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
+    // Output flags - Turn off output processing
+    // no CR to NL translation, no NL to CR-NL translation,
+    // no NL to CR translation, no column 0 CR suppression,
+    // no Ctrl-D suppression, no fill characters, no case mapping,
+    // no local output processing
+    // config.c_oflag &= ~(OCRNL | ONLCR | ONLRET | ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
+    uart_config.c_oflag = 0;
+    // No line processing
+    // echo off, echo newline off, canonical mode off,
+    // extended input processing off, signal chars off
+    uart_config.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+    // no parity, one stop bit, disable flow control
+    uart_config.c_cflag &= ~(CSTOPB | PARENB | CRTSCTS);
+    // Set speed
+    if ((termios_state = cfsetispeed(&uart_config, baud_rate)) < 0) {
         PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
         return -1;
     }
-
-    if ((termios_state = cfsetospeed(&uart_config, speed)) < 0) {
+    if ((termios_state = cfsetospeed(&uart_config, baud_rate)) < 0) {
         PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
         return -1;
     }
-
     if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
         PX4_INFO("ERR: %d (tcsetattr)", termios_state);
         return -1;
     }
-
+    PX4_INFO("Done!");
     return 0;
 }
 
