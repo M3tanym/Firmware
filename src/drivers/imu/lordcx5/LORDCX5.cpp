@@ -55,7 +55,7 @@ int LORDCX5::configSerial() {
 
     serial_fd = open(dev, O_RDWR | O_NOCTTY);
     if (serial_fd < 0) {
-        PX4_ERR("ERR: failed to open serial port: %s", dev);
+        PX4_ERR("Failed to open serial port: %s", dev);
         return -1;
     }
 
@@ -95,7 +95,7 @@ int LORDCX5::configSerial() {
         PX4_INFO("ERR: %d (tcsetattr)", termios_state);
         return -1;
     }
-    PX4_INFO("Done!");
+    PX4_INFO("Opened serial port %s at speed %d", dev, baud_rate);
     return 0;
 }
 
