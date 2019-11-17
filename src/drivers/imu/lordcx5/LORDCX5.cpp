@@ -86,53 +86,9 @@ void LORDCX5::updateMIPInterface() {
 }
 
 int LORDCX5::configSerial() {
-    PX4_INFO("Opening serial port...");
-    struct termios uart_config;
-    int termios_state;
+    if (mip_sdk_port_open(, 0, baud_rate))
+        return -1;
 
-    serial_fd = open(dev, O_RDWR | O_NOCTTY);
-    if (serial_fd < 0) {
-        PX4_ERR("Failed to open serial port: %s", dev);
-        return -1;
-    }
-
-    PX4_INFO("Configuring serial port settings...");
-    tcgetattr(serial_fd, &uart_config);
-
-    // properly configure the terminal (see also https://en.wikibooks.org/wiki/Serial_Programming/termios)
-    // Input flags - Turn off input processing
-    // convert break to null byte, no CR to NL translation,
-    // no NL to CR translation, don't mark parity errors or breaks
-    // no input parity check, don't strip high bit off,
-    // no XON/XOFF software flow control
-    uart_config.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
-    // Output flags - Turn off output processing
-    // no CR to NL translation, no NL to CR-NL translation,
-    // no NL to CR translation, no column 0 CR suppression,
-    // no Ctrl-D suppression, no fill characters, no case mapping,
-    // no local output processing
-    // config.c_oflag &= ~(OCRNL | ONLCR | ONLRET | ONOCR | ONOEOT| OFILL | OLCUC | OPOST);
-    uart_config.c_oflag = 0;
-    // No line processing
-    // echo off, echo newline off, canonical mode off,
-    // extended input processing off, signal chars off
-    uart_config.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
-    // no parity, one stop bit, disable flow control
-    uart_config.c_cflag &= ~(CSTOPB | PARENB | CRTSCTS);
-    // Set speed
-    if ((termios_state = cfsetispeed(&uart_config, baud_rate)) < 0) {
-        PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
-        return -1;
-    }
-    if ((termios_state = cfsetospeed(&uart_config, baud_rate)) < 0) {
-        PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
-        return -1;
-    }
-    if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
-        PX4_INFO("ERR: %d (tcsetattr)", termios_state);
-        return -1;
-    }
-    PX4_INFO("Opened serial port %s at speed %d", dev, baud_rate);
     return 0;
 }
 
