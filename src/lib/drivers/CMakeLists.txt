@@ -41,3 +41,5 @@ add_subdirectory(linux_gpio)
 add_subdirectory(magnetometer)
 add_subdirectory(rangefinder)
 add_subdirectory(smbus)
+add_subdirectory(mip_sdk)
+

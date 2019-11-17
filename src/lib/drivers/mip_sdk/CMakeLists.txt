@@ -1,6 +1,6 @@
 ############################################################################
 #
-#   Copyright (c) 2019 PX4 Development Team. All rights reserved.
+#   Copyright (c) 2015 PX4 Development Team. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,21 +30,17 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 ############################################################################
-px4_add_module(
-	MODULE drivers__imu__lordcx5
-	MAIN lordcx5
-	COMPILE_FLAGS
-		-Wno-cast-align # TODO: fix and enable
-	SRCS
-		LORDCX5.cpp
-		lordcx5_main.cpp
-	DEPENDS
-	  px4_work_queue
-	  mip_sdk
-	  drivers_accelerometer
-	  drivers_barometer
-	  drivers_gyroscope
-	  drivers_magnetometer
-	MODULE_CONFIG
-    module.yaml
+
+px4_add_library(mip_sdk
+	mip.c
+	mip_sdk_3dm.c
+	mip_sdk_ahrs.c
+	mip_sdk_base.c
+	mip_sdk_filter.c
+	mip_sdk_gps.c
+	mip_sdk_inteface.c
+	mip_sdk_system.c
+	ring_buffer.c
 	)
+
+target_link_libraries(mip_sdk PRIVATE cdev)

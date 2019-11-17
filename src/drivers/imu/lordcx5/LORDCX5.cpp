@@ -36,6 +36,7 @@
  */
 
 #include "LORDCX5.h"
+#include <mip_sdk>
 
 LORDCX5::LORDCX5(const char *device, int baud) :
     baud_rate(baud) {
@@ -108,6 +109,7 @@ void LORDCX5::testRead() {
     if (bytes_available > 0) {
         uint8_t buf[bytes_available];
         int ret = read(serial_fd, buf, sizeof(buf));
+        
         PX4_INFO("Read %d bytes: |%s|", ret, buf);
     }
 }
