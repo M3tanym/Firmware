@@ -38,15 +38,51 @@
 #include "LORDCX5.h"
 #include <mip_sdk>
 
-LORDCX5::LORDCX5(const char *device, int baud) :
+mip_interface device_interface;
+
+LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(
     baud_rate(baud) {
     dev = new char[20];
     strncpy(dev, device, 19);
     dev[19] = 0;
+    
+    ///
+    //Initialize the interface to the device
+    ///
+    
+    if(mip_interface_init(com_port, baudrate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
+        return -1;
+    
+     u8  enable = 1;
+ 
+    /// 
+    //Enable the FILTER datastream
+    ///
+
+    mip_3dm_cmd_continuous_data_stream(&device_interface,       
+    MIP_FUNCTION_SELECTOR_WRITE, MIP_3DM_INS_DATASTREAM, &enable);
+
+    ///
+    //Enable the AHRS datastream
+    ///
+    
+    mip_3dm_cmd_continuous_data_stream(&device_interface, 
+    MIP_FUNCTION_SELECTOR_WRITE, MIP_3DM_AHRS_DATASTREAM, &enable);
+    
+    ///
+    //Enable the GPS datastream
+    ///
+    
+    mip_3dm_cmd_continuous_data_stream(&device_interface,  
+    MIP_FUNCTION_SELECTOR_WRITE, MIP_3DM_GPS_DATASTREAM, &enable);
 }
 
 LORDCX5::~LORDCX5() {
     delete[] dev;
+}
+
+void LORDCX5::updateMIPInterface() {
+   mip_interface_update(&device_interface); 
 }
 
 int LORDCX5::configSerial() {
@@ -122,4 +158,29 @@ bool LORDCX5::testWrite(uint8_t *data, size_t len) {
     bool success = written == len;
     PX4_INFO("Wrote %d bytes. Success: %d", written, success);
     return success;
+}
+
+void LORDCX5::start()
+{
+	// Make sure we are stopped first.
+	stop();
+
+	// Start polling at the specified interval
+	ScheduleOnInterval((1_s / _sample_rate), 10000);
+}
+
+void LORDCX5::stop()
+{
+	ScheduleClear();
+}
+
+void LORDCX5::measure() {
+    updateMIPInterface();
+     // TODO set read values
+}
+
+void LORDCX5::Run()
+{
+	// Make another measurement.
+	measure();
 }

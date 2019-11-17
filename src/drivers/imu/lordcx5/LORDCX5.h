@@ -48,7 +48,7 @@
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 #include <termios.h>
 
-class LORDCX5
+class LORDCX5 : px4::ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_device_id())
 {
     public:
         LORDCX5(const char * device, int baud);
@@ -56,6 +56,10 @@ class LORDCX5
         bool testWrite(uint8_t *data, size_t len);
         void testRead();
         int configSerial();
+        void start();
+        void stop();
+        void updateMIPInterface();
+        void measure();
 
     protected:
 
@@ -63,4 +67,5 @@ class LORDCX5
         int             serial_fd{-1};
         unsigned        baud_rate;
         char            *dev {};
+        static constexpr float _sample_rate{ADIS16448_ACCEL_GYRO_UPDATE_RATE};
 };
