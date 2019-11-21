@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-//! @file    mip_sdk_user_functions.h 
+//! @file    byteswap_utilities.h 
 //! @author  Nathan Miller
 //! @version 1.1
 //
-//! @description Target-Specific, User-Defined Functions Definitions
+//! @description Utility functions for byteswapping
 //
 // External dependencies:
 //
-//  
+//  mip_types.h
 // 
 //!@copyright 2014 Lord Microstrain Sensing Systems. 
 //
@@ -27,16 +27,17 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _MIP_SDK_USER_FUNCTIONS_H
-#define _MIP_SDK_USER_FUNCTIONS_H
+#ifndef _UTILITIES_H
+#define _UTILITIES_H
 
+   
 ////////////////////////////////////////////////////////////////////////////////
 //
 //Include Files
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "mip.h"
+#include "mip_types.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -45,10 +46,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //! @def 
 
-#define MIP_USER_FUNCTION_OK    0
-#define MIP_USER_FUNCTION_ERROR 1
 
-#define MIP_COM_PORT_BUFFER_SIZE 0x200
+////////////////////////////////////////////////////////////////////////////////
+//
+// Structures
+//
+////////////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,17 +60,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
-u16 mip_sdk_port_open(void **port_handle, int port_num, int baudrate);
-u16 mip_sdk_port_close(void *port_handle);
-
-u16 mip_sdk_port_write(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_written, u32 timeout_ms);
-u16 mip_sdk_port_read(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_read, u32 timeout_ms);
-
-u32 mip_sdk_port_read_count(void *port_handle);
-
-u32 mip_sdk_get_time_ms(void);
-
+void byteswap(void *in, void *out, u16 size);
+void byteswap_inplace(void *data, u16 size);
 
 
 #endif

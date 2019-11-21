@@ -335,8 +335,9 @@ u16 mip_is_mip_packet(u8 *mip_buffer)
    return MIP_ERROR;
 
  //If the header contains valid parameters, return OK
- if((header_ptr->sync1 == MIP_SYNC_BYTE1) && (header_ptr->sync2 == MIP_SYNC_BYTE2) && 
-    (header_ptr->payload_size <= MIP_MAX_PAYLOAD_SIZE))
+ if((header_ptr->sync1 == MIP_SYNC_BYTE1) && (header_ptr->sync2 == MIP_SYNC_BYTE2)
+     && (sizeof(u8) == 8 || header_ptr->payload_size <= MIP_MAX_PAYLOAD_SIZE)
+)
    return MIP_OK;
  
  //Not a MIP packet header
