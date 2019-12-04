@@ -2871,7 +2871,7 @@ u16 mip_filter_estimation_control(mip_interface *device_interface, u8 function_s
 
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  short_ptr       = (u16*)&command_data[1];
+  short_ptr       = (u16*)reinterpret_cast<void*>(&command_data[1]);
   *short_ptr      = *estimation_control;
 
   //Byteswap the bias control value if enabled
@@ -2959,7 +2959,7 @@ u16 mip_filter_enable_measurement(mip_interface *device_interface, u8 function_s
 
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  short_ptr       = (u16*)&command_data[1];
+  short_ptr       = (u16*)reinterpret_cast<void*>(&command_data[1]);
   *short_ptr      = *measurement_enable;
 
   //Byteswap the bias control value if enabled
