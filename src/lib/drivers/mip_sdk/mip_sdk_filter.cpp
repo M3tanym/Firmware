@@ -2776,7 +2776,7 @@ u16 mip_filter_reference_position(mip_interface *device_interface,  u8 function_
   //Copy the enable flag to the local buffer
   command_data[1] = *reference_enable;
 	 
-  double_ptr = (double*)&command_data[2];
+  double_ptr = (double*)reinterpret_cast<void*>(&command_data[2]);
  
   //Copy the reference position to the local buffer
   memcpy(double_ptr, reference_position, sizeof(double)*3);
