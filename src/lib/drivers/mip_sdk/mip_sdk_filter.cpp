@@ -2115,7 +2115,7 @@ u16 mip_filter_gyro_bias_model(mip_interface *device_interface, u8 function_sele
   if((field_header_ptr->descriptor == MIP_FILTER_REPLY_GYRO_BIAS_MODEL) &&
      (field_header_ptr->size >= sizeof(mip_field_header) + sizeof(float)*6))
   {
-   float_ptr = (float*)(response_data + sizeof(mip_field_header));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header)));
   
    memcpy(bias_beta,         float_ptr,   sizeof(float)*3);
    memcpy(bias_noise_1sigma, float_ptr+3, sizeof(float)*3);
@@ -2221,7 +2221,7 @@ u16 mip_filter_accel_bias_model(mip_interface *device_interface, u8 function_sel
   if((field_header_ptr->descriptor == MIP_FILTER_REPLY_ACCEL_BIAS_MODEL) &&
      (field_header_ptr->size >= sizeof(mip_field_header) + sizeof(float)*6))
   {
-   float_ptr = (float*)(response_data + sizeof(mip_field_header));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header)));
   
    memcpy(bias_beta,         float_ptr,   sizeof(float)*3);
    memcpy(bias_noise_1sigma, float_ptr+3, sizeof(float)*3);
@@ -2323,7 +2323,7 @@ u16 mip_filter_zero_velocity_update_control(mip_interface *device_interface, u8 
   {
    zero_velocity_control->enable = *(response_data + sizeof(mip_field_header));
   
-   float_ptr = (float*)(response_data + sizeof(mip_field_header) + sizeof(u8));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header) + sizeof(u8)));
   
    memcpy(&zero_velocity_control->threshold, float_ptr, sizeof(float));
    
@@ -2421,7 +2421,7 @@ u16 mip_filter_zero_angular_rate_update_control(mip_interface *device_interface,
   {
    zero_angular_rate_control->enable = *(response_data + sizeof(mip_field_header));
   
-   float_ptr = (float*)(response_data + sizeof(mip_field_header) + sizeof(u8));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header) + sizeof(u8)));
   
    memcpy(&zero_angular_rate_control->threshold, float_ptr, sizeof(float));
    
@@ -3152,7 +3152,7 @@ u16 mip_filter_accel_magnitude_error_adaptive_measurement(mip_interface *device_
   {
    params->enable = *(response_data + sizeof(mip_field_header));
   
-   float_ptr = (float*)(response_data + sizeof(mip_field_header) + sizeof(u8));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header) + sizeof(u8)));
 
    memcpy(&params->low_pass_cutoff, float_ptr, sizeof(float)*6);
    
@@ -3255,7 +3255,7 @@ u16 mip_filter_mag_magnitude_error_adaptive_measurement(mip_interface *device_in
   {
    params->enable = *(response_data + sizeof(mip_field_header));
   
-   float_ptr = (float*)(response_data + sizeof(mip_field_header) + sizeof(u8));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header) + sizeof(u8)));
 
    memcpy(&params->low_pass_cutoff, float_ptr, sizeof(float)*6);
    
@@ -3358,7 +3358,7 @@ u16 mip_filter_mag_dip_angle_error_adaptive_measurement(mip_interface *device_in
   {
    params->enable = *(response_data + sizeof(mip_field_header));
   
-   float_ptr = (float*)(response_data + sizeof(mip_field_header) + sizeof(u8));
+   float_ptr = (float*)reinterpret_cast<void*>((response_data + sizeof(mip_field_header) + sizeof(u8)));
 
    memcpy(&params->low_pass_cutoff, float_ptr, sizeof(float)*4);
    
