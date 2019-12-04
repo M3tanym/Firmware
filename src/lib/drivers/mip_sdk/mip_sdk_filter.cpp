@@ -1283,7 +1283,7 @@ u16 mip_filter_sensor2vehicle_tranformation(mip_interface *device_interface, u8 
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr = (float*)&command_data[1];
+  float_ptr = (float*)reinterpret_cast<void*>(&command_data[1]);
 
   //Copy the angles to a local buffer
   memcpy(float_ptr, euler_angles, sizeof(float)*3);
