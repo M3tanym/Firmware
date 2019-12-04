@@ -1379,7 +1379,7 @@ u16 mip_filter_sensor2vehicle_offset(mip_interface *device_interface, u8 functio
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr = (float*)&command_data[1];
+  float_ptr = (float*) reinterpret_cast<void*>(&command_data[1]);
   
   //Copy the angles to a local buffer
   memcpy(float_ptr, offset, sizeof(float)*3);
@@ -1474,7 +1474,7 @@ u16 mip_filter_antenna_offset(mip_interface *device_interface, u8 function_selec
 
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr       = (float*)&command_data[1];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[1]);
  
   //Copy the angles to a local buffer
   memcpy(float_ptr, offset, sizeof(float)*3);
@@ -1894,7 +1894,7 @@ u16 mip_filter_accel_noise(mip_interface *device_interface, u8 function_selector
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr       = (float*)&command_data[1];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[1]);
  
   //Copy the angles to a local buffer
   memcpy(float_ptr, noise_1sigma, sizeof(float)*3);
@@ -1991,7 +1991,7 @@ u16 mip_filter_gyro_noise(mip_interface *device_interface, u8 function_selector,
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr       = (float*)&command_data[1];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[1]);
  
   //Copy the angles to a local buffer
   memcpy(float_ptr, noise_1sigma, sizeof(float)*3);
@@ -2090,7 +2090,7 @@ u16 mip_filter_gyro_bias_model(mip_interface *device_interface, u8 function_sele
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr       = (float*)&command_data[1];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[1]);
   
   //Copy the parameters to a local buffer
   memcpy(float_ptr,   bias_beta,         sizeof(float)*3);
@@ -2196,7 +2196,7 @@ u16 mip_filter_accel_bias_model(mip_interface *device_interface, u8 function_sel
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr       = (float*)&command_data[1];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[1]);
   
   //Copy the parameters to a local buffer
   memcpy(float_ptr,   bias_beta,         sizeof(float)*3);
@@ -2298,7 +2298,7 @@ u16 mip_filter_zero_velocity_update_control(mip_interface *device_interface, u8 
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
   command_data[1] = zero_velocity_control->enable; 
-  float_ptr       = (float*)&command_data[2];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[2]);
   
   //Copy the parameters to a local buffer
   memcpy(float_ptr, &zero_velocity_control->threshold, sizeof(float));
@@ -2396,7 +2396,7 @@ u16 mip_filter_zero_angular_rate_update_control(mip_interface *device_interface,
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
   command_data[1] = zero_angular_rate_control->enable; 
-  float_ptr       = (float*)&command_data[2];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[2]);
   
   //Copy the parameters to a local buffer
   memcpy(float_ptr, &zero_angular_rate_control->threshold, sizeof(float));
@@ -2676,7 +2676,7 @@ u16 mip_filter_mag_noise(mip_interface *device_interface, u8 function_selector, 
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
-  float_ptr = (float*)&command_data[1];
+  float_ptr = (float*)reinterpret_cast<void*>(&command_data[1]);
  
   //Copy the angles to a local buffer
   memcpy(float_ptr, noise_1sigma, sizeof(float)*3);
@@ -3126,7 +3126,7 @@ u16 mip_filter_accel_magnitude_error_adaptive_measurement(mip_interface *device_
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
   command_data[1] = params->enable; 
-  float_ptr       = (float*)&command_data[2];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[2]);
  
   //Copy the parameters to a local buffer
   memcpy(float_ptr, &params->low_pass_cutoff, sizeof(float)*6);
@@ -3229,7 +3229,7 @@ u16 mip_filter_mag_magnitude_error_adaptive_measurement(mip_interface *device_in
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
   command_data[1] = params->enable; 
-  float_ptr       = (float*)&command_data[2];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[2]);
  
   //Copy the parameters to a local buffer
   memcpy(float_ptr, &params->low_pass_cutoff, sizeof(float)*6);
@@ -3332,7 +3332,7 @@ u16 mip_filter_mag_dip_angle_error_adaptive_measurement(mip_interface *device_in
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
   command_data[1] = params->enable; 
-  float_ptr       = (float*)&command_data[2];
+  float_ptr       = (float*)reinterpret_cast<void*>(&command_data[2]);
  
   //Copy the parameters to a local buffer
   memcpy(float_ptr, &params->low_pass_cutoff, sizeof(float)*4);
