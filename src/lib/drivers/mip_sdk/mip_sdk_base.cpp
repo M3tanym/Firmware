@@ -216,7 +216,7 @@ u16 mip_base_cmd_get_device_supported_descriptors(mip_interface *device_interfac
    //Byteswap the descriptors if enabled
    if(MIP_SDK_CONFIG_BYTESWAP)
    {
-    short_ptr = (u16*)response_buffer;
+    short_ptr = reinterpret_cast<u16*>(reinterpret_cast<void*>(response_buffer));
     
     for(i=0; i<*response_size/2; i++)
      byteswap_inplace(&short_ptr[i],  sizeof(u16));

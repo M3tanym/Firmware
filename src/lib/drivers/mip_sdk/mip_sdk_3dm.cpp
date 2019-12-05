@@ -472,7 +472,7 @@ u16 mip_3dm_cmd_ahrs_message_format(mip_interface *device_interface, u8 function
   for(i=0; i<*num_entries; i++)
   {
    command_data[2+i*3] = descriptors[i];
-   short_ptr           = (u16*)&command_data[3+i*3];
+   short_ptr           = (u16*)reinterpret_cast<void*>(&command_data[3+i*3]);
    *short_ptr          = decimation[i];
    
    //Byteswap the descimation if enabled
@@ -515,7 +515,7 @@ u16 mip_3dm_cmd_ahrs_message_format(mip_interface *device_interface, u8 function
    for(i=0; i<*num_entries; i++)
    {
     descriptors[i] = response_data[1+i*3];
-    short_ptr      = (u16*)&response_data[2+i*3];
+    short_ptr      = (u16*)reinterpret_cast<void*>(&response_data[2+i*3]);
     decimation[i]  = *short_ptr;
    
     //Byteswap the descimation if enabled
@@ -602,7 +602,7 @@ u16 mip_3dm_cmd_gps_message_format(mip_interface *device_interface, u8 function_
   for(i=0; i<*num_entries; i++)
   {
    command_data[2+i*3] = descriptors[i];
-   short_ptr           = (u16*)&command_data[3+i*3];
+   short_ptr           = (u16*)reinterpret_cast<void*>(&command_data[3+i*3]);
    *short_ptr          = decimation[i];
    
    //Byteswap the descimation if enabled
@@ -645,7 +645,7 @@ u16 mip_3dm_cmd_gps_message_format(mip_interface *device_interface, u8 function_
    for(i=0; i<*num_entries; i++)
    {
     descriptors[i] = response_data[1+i*3];
-    short_ptr      = (u16*)&response_data[2+i*3];
+    short_ptr      = (u16*)reinterpret_cast<void*>(&response_data[2+i*3]);
     decimation[i]  = *short_ptr;
    
     //Byteswap the descimation if enabled
@@ -732,7 +732,7 @@ u16 mip_3dm_cmd_filter_message_format(mip_interface *device_interface, u8 functi
   for(i=0; i<*num_entries; i++)
   {
    command_data[2+i*3] = descriptors[i];
-   short_ptr           = (u16*)&command_data[3+i*3];
+   short_ptr           = (u16*)reinterpret_cast<void*>(&command_data[3+i*3]);
    *short_ptr          = decimation[i];
    
    //Byteswap the descimation if enabled
@@ -775,7 +775,7 @@ u16 mip_3dm_cmd_filter_message_format(mip_interface *device_interface, u8 functi
    for(i=0; i<*num_entries; i++)
    {
     descriptors[i] = response_data[1+i*3];
-    short_ptr      = (u16*)&response_data[2+i*3];
+    short_ptr      = (u16*)reinterpret_cast<void*>(&response_data[2+i*3]);
     decimation[i]  = *short_ptr;
    
     //Byteswap the descimation if enabled
@@ -1146,7 +1146,7 @@ u16 mip_3dm_cmd_ahrs_timestamp(mip_interface *device_interface, u8 function_sele
  //Fill-in the command data
  command_data[0] = function_selector;
  command_data[1] = *time_selector;
- word_ptr        = (u32*)&command_data[2];
+ word_ptr        = (u32*)reinterpret_cast<void*>(&command_data[2]);
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
@@ -1271,7 +1271,7 @@ u16 mip_3dm_cmd_uart_baudrate(mip_interface *device_interface, u8 function_selec
  
  //Fill-in the command data
  command_data[0] = function_selector;
- word_ptr        = (u32*)&command_data[1];
+ word_ptr        = (u32*)reinterpret_cast<void*>(&command_data[1]);
  
  if(function_selector == MIP_FUNCTION_SELECTOR_WRITE)
  {
@@ -1532,7 +1532,7 @@ u16 mip_3dm_cmd_device_status(mip_interface *device_interface, u16 model_number,
  u16 user_buffer_size = *response_size;
  
  //Fill-in the command data
- short_ptr       = (u16*)&command_data[0];
+ short_ptr       = (u16*)reinterpret_cast<void*>(&command_data[0]);
  *short_ptr      = model_number;
  command_data[2] = status_selector;
  
@@ -1683,7 +1683,7 @@ u16 mip_3dm_cmd_accel_bias(mip_interface *device_interface, u8 function_selector
 
   memcpy(&command_data[1], &bias_vector[0], 3*sizeof(float));
 
-  bias_element_pointer = (float *)(&command_data[1]);
+  bias_element_pointer = (float *)reinterpret_cast<void*>(&command_data[1]);
 
   //Byteswap if enabled
   if(MIP_SDK_CONFIG_BYTESWAP)
@@ -1763,7 +1763,7 @@ u16 mip_3dm_cmd_gyro_bias(mip_interface *device_interface, u8 function_selector,
 
   memcpy(&command_data[1], &bias_vector[0], 3*sizeof(float));
 
-  bias_element_pointer = (float *)(&command_data[1]);
+  bias_element_pointer = (float *)reinterpret_cast<void*>(&command_data[1]);
 
   //Byteswap if enabled
   if(MIP_SDK_CONFIG_BYTESWAP)
@@ -1987,7 +1987,7 @@ u16 mip_3dm_cmd_hard_iron(mip_interface *device_interface, u8 function_selector,
  {
   memcpy(&command_data[1], &vector[0], 3*sizeof(float));
 
-  vector_pointer = (float *)(&command_data[1]);
+  vector_pointer = (float *)reinterpret_cast<void*>(&command_data[1]);
 
   //Byteswap if enabled
   if(MIP_SDK_CONFIG_BYTESWAP)
@@ -2067,7 +2067,7 @@ u16 mip_3dm_cmd_soft_iron(mip_interface *device_interface, u8 function_selector,
  {
   memcpy(&command_data[1], &matrix[0], 9*sizeof(float));
 
-  matrix_pointer = (float *)(&command_data[1]);
+  matrix_pointer = (float *)reinterpret_cast<void*>(&command_data[1]);
 
   //Byteswap if enabled
   if(MIP_SDK_CONFIG_BYTESWAP)
@@ -2147,7 +2147,7 @@ u16 mip_3dm_sensor2vehicle_tranformation(mip_interface *device_interface, u8 fun
  {
   memcpy(&command_data[1], &euler_angles[0], 3*sizeof(float));
 
-  angle_pointer = (float *)(&command_data[1]);
+  angle_pointer = (float *)reinterpret_cast<void*>(&command_data[1]);
 
   //Byteswap if enabled
   if(MIP_SDK_CONFIG_BYTESWAP)

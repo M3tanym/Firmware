@@ -32,15 +32,15 @@
 ############################################################################
 
 px4_add_library(mip_sdk
-	mip.c
-	mip_sdk_3dm.c
-	mip_sdk_ahrs.c
-	mip_sdk_base.c
-	mip_sdk_filter.c
-	mip_sdk_gps.c
-	mip_sdk_inteface.c
-	mip_sdk_system.c
-	ring_buffer.c
+	mip.cpp
+	mip_sdk_3dm.cpp
+	mip_sdk_ahrs.cpp
+	mip_sdk_base.cpp
+	mip_sdk_filter.cpp
+	mip_sdk_gps.cpp
+	mip_sdk_inteface.cpp
+	mip_sdk_system.cpp
+	ring_buffer.cpp
 	)
 
 target_link_libraries(mip_sdk PRIVATE cdev)
