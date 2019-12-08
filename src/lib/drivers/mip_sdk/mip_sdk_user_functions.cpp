@@ -63,10 +63,17 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-u16 mip_sdk_port_open(void **port_handle, int port_num, int baudrate)
+u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
 {
+    char port_name[100] = {0};
+    char port_index[10] = {0};
+    static int serial_fd = {-1};
+    strcat(port_name, "/dev/ttyS");
+    //construct port filename address string
+    sprintf(&port_index[0], "%u", port_num);
+    strcat(port_name, port_index);
     // open serial port
-    serial_fd = open(dev, O_RDWR | O_NOCTTY);
+    serial_fd = open(port_name, O_RDWR | O_NOCTTY);
     
     if (serial_fd < 0) {
         return MIP_USER_FUNCTION_ERROR;
@@ -109,6 +116,9 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baudrate)
     if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
         return MIP_USER_FUNCTION_ERROR;
     }
+
+    // assign external pointer to port handle pointer
+    *port_handle = &serial_fd;
     
     return MIP_USER_FUNCTION_OK; 
 }

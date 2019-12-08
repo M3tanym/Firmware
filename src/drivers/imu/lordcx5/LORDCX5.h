@@ -57,9 +57,6 @@ class LORDCX5 : px4::ScheduledWorkItem
     public:
         LORDCX5(int device_port, int baud);
         ~LORDCX5();
-        bool testWrite(uint8_t *data, size_t len);
-        void testRead();
-        int configSerial();
         void start();
         void Run();
         void stop();
@@ -69,7 +66,6 @@ class LORDCX5 : px4::ScheduledWorkItem
     protected:
 
     private:
-        int             serial_fd{-1};
         unsigned        baud_rate;
         int             port_num;
         static constexpr float _sample_rate{LORDCX5_ACCEL_GYRO_UPDATE_RATE};

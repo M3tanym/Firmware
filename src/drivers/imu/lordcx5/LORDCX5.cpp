@@ -79,36 +79,29 @@ void LORDCX5::updateMIPInterface() {
    mip_interface_update(&device_interface); 
 }
 
-int LORDCX5::configSerial() {
-    if (mip_sdk_port_open(&serial_fd, 0, baud_rate))
-        return -1;
-
-    return 0;
-}
-
-void LORDCX5::testRead() {
-    int err = 0;
-    int bytes_available = 0;
-    PX4_INFO("Reading...");
-    err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
-    PX4_INFO("Bytes available: %d, error: %d", bytes_available, err);
-    if (bytes_available > 0) {
-        uint8_t buf[bytes_available];
-        int ret = read(serial_fd, buf, sizeof(buf));
-        
-        PX4_INFO("Read %d bytes: |%s|", ret, buf);
-    }
-}
-
-bool LORDCX5::testWrite(uint8_t *data, size_t len) {
-    PX4_INFO("Writing...");
-    size_t written = write(serial_fd, data, len);
-    fsync(serial_fd);
-
-    bool success = written == len;
-    PX4_INFO("Wrote %d bytes. Success: %d", written, success);
-    return success;
-}
+//void LORDCX5::testRead() {
+//    int err = 0;
+//    int bytes_available = 0;
+//    PX4_INFO("Reading...");
+//    err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
+//    PX4_INFO("Bytes available: %d, error: %d", bytes_available, err);
+//    if (bytes_available > 0) {
+//        uint8_t buf[bytes_available];
+//        int ret = read(serial_fd, buf, sizeof(buf));
+//
+//        PX4_INFO("Read %d bytes: |%s|", ret, buf);
+//    }
+//}
+//
+//bool LORDCX5::testWrite(uint8_t *data, size_t len) {
+//    PX4_INFO("Writing...");
+//    size_t written = write(serial_fd, data, len);
+//    fsync(serial_fd);
+//
+//    bool success = written == len;
+//    PX4_INFO("Wrote %d bytes. Success: %d", written, success);
+//    return success;
+//}
 
 void LORDCX5::start()
 {

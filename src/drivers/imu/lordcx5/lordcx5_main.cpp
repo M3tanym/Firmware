@@ -81,10 +81,8 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 		return 1;
 	}
 	LORDCX5 l(device_port, baudrate_main);
-    l.configSerial();
     // uint8_t ping[8] = {0x75, 0x65, 0x01, 0x02, 0x02, 0x01, 0xE0, 0xC6};
     // l.testWrite(ping, 8);
-	l.start();
 /*
 	GPS *gps;
 	if (instance == Instance::Main) {
