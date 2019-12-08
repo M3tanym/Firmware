@@ -55,7 +55,7 @@ static constexpr int DEFAULT_PACKET_TIMEOUT_MS{10};
 class LORDCX5 : px4::ScheduledWorkItem
 {
     public:
-        LORDCX5(const char * device, int baud);
+        LORDCX5(int device_port, int baud);
         ~LORDCX5();
         bool testWrite(uint8_t *data, size_t len);
         void testRead();
@@ -71,6 +71,6 @@ class LORDCX5 : px4::ScheduledWorkItem
     private:
         int             serial_fd{-1};
         unsigned        baud_rate;
-        char            *dev {};
+        int             port_num;
         static constexpr float _sample_rate{LORDCX5_ACCEL_GYRO_UPDATE_RATE};
 };

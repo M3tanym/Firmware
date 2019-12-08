@@ -35,6 +35,7 @@
  * @file lordcx5_main.cpp
  */
 
+#include <stdlib.h>
 #include "LORDCX5.h"
 
 /**
@@ -44,7 +45,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 {
     PX4_INFO("LORD starting");
     
-    const char *device_name = "/dev/ttyS3";
+    int device_port = 3;
 	int baudrate_main = 115200;
 
 	bool error_flag = false;
@@ -62,7 +63,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 			break;
 
 		case 'd':
-			device_name = arg;
+			device_port = atoi(arg);
 			break;
 
 		case '?':
@@ -79,7 +80,7 @@ extern "C" int lordcx5_main(int argc, char *argv[])
 	if (error_flag) {
 		return 1;
 	}
-	LORDCX5 l(device_name, baudrate_main);
+	LORDCX5 l(device_port, baudrate_main);
     l.configSerial();
     // uint8_t ping[8] = {0x75, 0x65, 0x01, 0x02, 0x02, 0x01, 0xE0, 0xC6};
     // l.testWrite(ping, 8);

@@ -40,17 +40,15 @@
 
 mip_interface device_interface;
 
-LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(0)),
-    baud_rate(baud) {
-    dev = new char[20];
-    strncpy(dev, device, 19);
-    dev[19] = 0;
+LORDCX5::LORDCX5(int device_port, int baud) : ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(0)),
+    baud_rate(baud),
+    port_num(device_port) {
     
     ///
     //Initialize the interface to the device
     ///
     
-    if(mip_interface_init(dev, baud_rate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
+    if(mip_interface_init(device_port, baud_rate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
         return -1;
     
      u8  enable = 1;
@@ -77,16 +75,12 @@ LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(MODULE_NAME, 
     MIP_FUNCTION_SELECTOR_WRITE, MIP_3DM_GPS_DATASTREAM, &enable);
 }
 
-LORDCX5::~LORDCX5() {
-    delete[] dev;
-}
-
 void LORDCX5::updateMIPInterface() {
    mip_interface_update(&device_interface); 
 }
 
 int LORDCX5::configSerial() {
-    if (mip_sdk_port_open(, 0, baud_rate))
+    if (mip_sdk_port_open(&serial_fd, 0, baud_rate))
         return -1;
 
     return 0;
