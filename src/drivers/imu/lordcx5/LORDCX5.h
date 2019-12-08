@@ -36,6 +36,7 @@
  */
 
 #include <lib/drivers/mip_sdk/mip_sdk.h>
+#include <lib/drivers/mip_sdk/byteswap_utilities.h>
 #include <drivers/device/spi.h>
 #include <ecl/geo/geo.h>
 #include <lib/conversion/rotation.h>
