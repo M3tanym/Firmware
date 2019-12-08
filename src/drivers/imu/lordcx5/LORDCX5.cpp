@@ -36,7 +36,6 @@
  */
 
 #include "LORDCX5.h"
-#include <lib/drivers/mip_sdk/mip_sdk.h>
 
 mip_interface device_interface;
 

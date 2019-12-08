@@ -35,6 +35,7 @@
  * @file LORDCX5.h
  */
 
+#include <lib/drivers/mip_sdk/mip_sdk.h>
 #include <drivers/device/spi.h>
 #include <ecl/geo/geo.h>
 #include <lib/conversion/rotation.h>
