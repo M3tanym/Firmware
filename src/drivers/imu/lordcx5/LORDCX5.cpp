@@ -48,8 +48,8 @@ LORDCX5::LORDCX5(int device_port, int baud) : ScheduledWorkItem(MODULE_NAME, px4
     //Initialize the interface to the device
     ///
     
-    if(mip_interface_init(device_port, baud_rate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
-        return -1;
+    if (mip_interface_init(device_port, baud_rate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
+        PX4_ERR("Failed to initialize LORD IMU!");
     
      u8  enable = 1;
  
