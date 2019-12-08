@@ -48,15 +48,20 @@
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 #include <termios.h>
 
-class LORDCX5 : px4::ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_device_id())
+static constexpr float LORDCX5_ACCEL_GYRO_UPDATE_RATE{819.2}; // accel and gryo max update 819.2 samples per second
+
+static constexpr int DEFAULT_PACKET_TIMEOUT_MS{10};
+
+class LORDCX5 : px4::ScheduledWorkItem
 {
     public:
         LORDCX5(const char * device, int baud);
-        virtual ~LORDCX5();
+        ~LORDCX5();
         bool testWrite(uint8_t *data, size_t len);
         void testRead();
         int configSerial();
         void start();
+        void Run();
         void stop();
         void updateMIPInterface();
         void measure();
@@ -67,5 +72,5 @@ class LORDCX5 : px4::ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(get_de
         int             serial_fd{-1};
         unsigned        baud_rate;
         char            *dev {};
-        static constexpr float _sample_rate{ADIS16448_ACCEL_GYRO_UPDATE_RATE};
+        static constexpr float _sample_rate{LORDCX5_ACCEL_GYRO_UPDATE_RATE};
 };

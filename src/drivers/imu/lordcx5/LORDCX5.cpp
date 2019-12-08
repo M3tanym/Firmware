@@ -36,11 +36,11 @@
  */
 
 #include "LORDCX5.h"
-#include <mip_sdk/mip_sdk.h>
+#include <lib/drivers/mip_sdk/mip_sdk.h>
 
 mip_interface device_interface;
 
-LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(
+LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(MODULE_NAME, px4::device_bus_to_wq(0)),
     baud_rate(baud) {
     dev = new char[20];
     strncpy(dev, device, 19);
@@ -50,7 +50,7 @@ LORDCX5::LORDCX5(const char *device, int baud) : ScheduledWorkItem(
     //Initialize the interface to the device
     ///
     
-    if(mip_interface_init(com_port, baudrate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
+    if(mip_interface_init(dev, baud_rate, &device_interface, DEFAULT_PACKET_TIMEOUT_MS) != MIP_INTERFACE_OK)
         return -1;
     
      u8  enable = 1;
