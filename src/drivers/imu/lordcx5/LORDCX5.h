@@ -48,6 +48,8 @@
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
 #include <termios.h>
 
+using namespace time_literals; // for 1_s
+
 static constexpr float LORDCX5_ACCEL_GYRO_UPDATE_RATE{819.2}; // accel and gryo max update 819.2 samples per second
 
 static constexpr int DEFAULT_PACKET_TIMEOUT_MS{10};
