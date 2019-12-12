@@ -69,7 +69,6 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
     struct termios uart_config;
     int termios_state;
 
-    serial_fd = open(dev, O_RDWR | O_NOCTTY);
     strcat(port_name, "/dev/ttyS");
     //construct port filename address string
     sprintf(&port_index[0], "%u", port_num);
@@ -86,18 +85,18 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
     uart_config.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
     uart_config.c_cflag &= ~(CSTOPB | PARENB | CRTSCTS);
 
-    if ((termios_state = cfsetispeed(&uart_config, speed)) < 0) {
-        PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
+    if ((termios_state = cfsetispeed(&uart_config, baud_rate)) < 0) {
+        // PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
         return -1;
     }
 
-    if ((termios_state = cfsetospeed(&uart_config, speed)) < 0) {
-        PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
+    if ((termios_state = cfsetospeed(&uart_config, baud_rate)) < 0) {
+        // PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
         return -1;
     }
 
     if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
-        PX4_INFO("ERR: %d (tcsetattr)", termios_state);
+        // PX4_INFO("ERR: %d (tcsetattr)", termios_state);
         return -1;
     }
 

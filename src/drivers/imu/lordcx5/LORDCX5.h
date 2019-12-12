@@ -48,7 +48,6 @@
 #include <px4_platform_common/cli.h>
 #include <px4_platform_common/getopt.h>
 #include <px4_platform_common/px4_work_queue/ScheduledWorkItem.hpp>
-#include <termios.h>
 
 using namespace time_literals; // for 1_s
 

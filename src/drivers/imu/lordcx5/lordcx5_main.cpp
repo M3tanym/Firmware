@@ -35,7 +35,6 @@
  * @file lordcx5_main.cpp
  */
 
-#include <stdlib.h>
 #include "LORDCX5.h"
 
 /**
