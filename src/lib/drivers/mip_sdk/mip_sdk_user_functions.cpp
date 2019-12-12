@@ -87,17 +87,17 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
 
     if ((termios_state = cfsetispeed(&uart_config, baud_rate)) < 0) {
         // PX4_ERR("ERR: %d (cfsetispeed)", termios_state);
-        return -1;
+        return MIP_USER_FUNCTION_ERROR;
     }
 
     if ((termios_state = cfsetospeed(&uart_config, baud_rate)) < 0) {
         // PX4_INFO("ERR: %d (cfsetospeed)", termios_state);
-        return -1;
+        return MIP_USER_FUNCTION_ERROR;
     }
 
     if ((termios_state = tcsetattr(serial_fd, TCSANOW, &uart_config)) < 0) {
         // PX4_INFO("ERR: %d (tcsetattr)", termios_state);
-        return -1;
+        return MIP_USER_FUNCTION_ERROR;
     }
 
     // assign external pointer to port handle pointer
@@ -132,8 +132,8 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
 
 u16 mip_sdk_port_close(void *port_handle)
 {
- //User must replace this code
- return MIP_USER_FUNCTION_ERROR; 
+ close(*port_handle);
+ return MIP_USER_FUNCTION_OK;
 }
 
 
@@ -166,8 +166,14 @@ u16 mip_sdk_port_close(void *port_handle)
 
 u16 mip_sdk_port_write(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_written, u32 timeout_ms)
 {
- //User must replace this code
- return MIP_USER_FUNCTION_ERROR;
+    int serial_fd = *port_handle;
+    u32 written = write(serial_fd, buffer, num_bytes);
+    fsync(serial_fd);
+    &bytes_written = written;
+    bool success = written == len;
+    if (success)
+        return MIP_USER_FUNCTION_OK;
+    return MIP_USER_FUNCTION_ERROR;
 }
 
 
@@ -200,10 +206,13 @@ u16 mip_sdk_port_write(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_
 
 u16 mip_sdk_port_read(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_read, u32 timeout_ms)
 {
- //User must replace this code
- return MIP_USER_FUNCTION_ERROR;
+    int serial_fd = *port_handle;
+    int ret = read(serial_fd, buffer, num_bytes);
+    *bytes_read = ret;
+    if (ret != num_bytes)
+        return MIP_USER_FUNCTION_ERROR;
+    return MIP_USER_FUNCTION_OK;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -230,8 +239,12 @@ u16 mip_sdk_port_read(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_r
 
 u32 mip_sdk_port_read_count(void *port_handle)
 {
- //User must replace this code
- return 0;
+    int serial_fd = *port_handle;
+    int bytes_available = 0;
+    int err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
+    uint8_t buf[bytes_available];
+    int *bytes_read;
+    return mip_sdk_port_read(port_handle, buf, bytes_available, bytes_read, 0);;
 }
 
 
