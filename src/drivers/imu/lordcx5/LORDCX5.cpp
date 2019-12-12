@@ -74,6 +74,10 @@ LORDCX5::LORDCX5(int device_port, int baud) : ScheduledWorkItem(MODULE_NAME, px4
     MIP_FUNCTION_SELECTOR_WRITE, MIP_3DM_GPS_DATASTREAM, &enable);
 }
 
+LORDCX5::~LORDCX5() {
+    
+}
+
 void LORDCX5::updateMIPInterface() {
    mip_interface_update(&device_interface); 
 }

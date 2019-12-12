@@ -41,6 +41,7 @@ px4_add_library(mip_sdk
 	mip_sdk_inteface.cpp
 	mip_sdk_system.cpp
 	ring_buffer.cpp
+	mip_sdk_user_functions.cpp
 	)
 
 target_link_libraries(mip_sdk PRIVATE cdev)
