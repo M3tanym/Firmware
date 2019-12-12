@@ -132,8 +132,9 @@ u16 mip_sdk_port_open(void **port_handle, int port_num, int baud_rate)
 
 u16 mip_sdk_port_close(void *port_handle)
 {
- close(*port_handle);
- return MIP_USER_FUNCTION_OK;
+    int serial_fd = *reinterpret_cast<int*>(port_handle);
+    close(serial_fd);
+    return MIP_USER_FUNCTION_OK;
 }
 
 
@@ -166,11 +167,11 @@ u16 mip_sdk_port_close(void *port_handle)
 
 u16 mip_sdk_port_write(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_written, u32 timeout_ms)
 {
-    int serial_fd = *port_handle;
+    int serial_fd = *reinterpret_cast<int*>(port_handle);
     u32 written = write(serial_fd, buffer, num_bytes);
     fsync(serial_fd);
-    &bytes_written = written;
-    bool success = written == len;
+    *bytes_written = written;
+    bool success = written == num_bytes;
     if (success)
         return MIP_USER_FUNCTION_OK;
     return MIP_USER_FUNCTION_ERROR;
@@ -206,8 +207,8 @@ u16 mip_sdk_port_write(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_
 
 u16 mip_sdk_port_read(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_read, u32 timeout_ms)
 {
-    int serial_fd = *port_handle;
-    int ret = read(serial_fd, buffer, num_bytes);
+    int serial_fd = *reinterpret_cast<int*>(port_handle);
+    u32 ret = read(serial_fd, buffer, num_bytes);
     *bytes_read = ret;
     if (ret != num_bytes)
         return MIP_USER_FUNCTION_ERROR;
@@ -239,12 +240,12 @@ u16 mip_sdk_port_read(void *port_handle, u8 *buffer, u32 num_bytes, u32 *bytes_r
 
 u32 mip_sdk_port_read_count(void *port_handle)
 {
-    int serial_fd = *port_handle;
+    int serial_fd = *reinterpret_cast<int*>(port_handle);
     int bytes_available = 0;
-    int err = ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
+    ioctl(serial_fd, FIONREAD, (unsigned long) &bytes_available);
     uint8_t buf[bytes_available];
-    int *bytes_read;
-    return mip_sdk_port_read(port_handle, buf, bytes_available, bytes_read, 0);;
+    u32 bytes_read = 0;
+    return mip_sdk_port_read(port_handle, buf, bytes_available, &bytes_read, 0);
 }
 
 
